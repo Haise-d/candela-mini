@@ -280,6 +280,21 @@ Option Coordinate(bool latitude) {
     return o;
 }
 
+// A fade's length: "Instant", "0.4 s", "20 s", "5 min".
+std::wstring Duration(int ms) {
+    if (ms <= 0) return Tr(L"Instant", L"即時");
+    std::wstring sec = Tr(L" s", L"秒"), min = Tr(L" min", L"分");
+    if (ms < 60000 && ms % 1000) {
+        wchar_t buf[16];
+        swprintf(buf, 16, L"%.1f", ms / 1000.0);
+        return buf + sec;
+    }
+    int s = ms / 1000;
+    if (s < 60) return std::to_wstring(s) + sec;
+    if (s % 60 == 0) return std::to_wstring(s / 60) + min;
+    return std::to_wstring(s / 60) + min + L" " + std::to_wstring(s % 60) + sec;
+}
+
 }  // namespace
 
 // ---- the list ------------------------------------------------------------------------------------------
@@ -467,6 +482,23 @@ std::vector<Page> Build() {
                               [](int v) { return std::to_wstring(v) + L"K"; }));
     for (HotkeyId id : {HK_DIMMER, HK_BRIGHTER, HK_DARKROOM, HK_TOGGLE}) warm.opts.push_back(hotkey(id));
     hk.groups.push_back(warm);
+    // Fades: color changes come on gradually; scheduled ones and the ones you make each take their own time.
+    Group fade{Tr(L"Fade", L"フェード"), 0, {}};
+    fade.opts.push_back(Toggle(L"fade", Tr(L"Fade color changes", L"色の切替をフェード"), &c.fade));
+    {
+        Option o = Steps(L"fadesched", Tr(L"Scheduled fade", L"スケジュール切替の所要時間"),
+                         {5, 10, 20, 30, 60, 120, 300, 600, 900, 1800, 3600}, &c.fade_seconds,
+                         [](int v) { return Duration(v * 1000); });
+        o.enabled = [] { return g_cfg.fade; };
+        fade.opts.push_back(o);
+    }
+    {
+        Option o = Steps(L"fadehk", Tr(L"Hotkey fade", L"ホットキー操作の所要時間"),
+                         {0, 200, 400, 700, 1000, 1500, 2000, 3000, 5000}, &c.fade_hotkey_ms, Duration);
+        o.enabled = [] { return g_cfg.fade; };
+        fade.opts.push_back(o);
+    }
+    hk.groups.push_back(fade);
     Group win{Tr(L"Windows", L"ウィンドウ"), 1, {}};
     for (HotkeyId id : {HK_BORDERLESS, HK_BLACKOUT}) win.opts.push_back(hotkey(id));
     win.opts.push_back(Action(L"hkdefault", Tr(L"Default hotkeys", L"初期設定に戻す"), [] { return Tr(L"Restore", L"復元"); }, [] {

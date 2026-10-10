@@ -30,6 +30,7 @@
 | Afterglow: the whole screen in red, for a dark room | ✅ | ✅ |
 | Colors put back when a game or driver resets them | ✅ | ✅ |
 | Normal colors back however it ends, even End task | ✅ | ✅ |
+| Fades: changes come on gradually, with their own times for the schedule and hotkeys | ✅ | ✅ |
 | **Hotkeys** | | |
 | Warmer, cooler, dimmer, brighter, Afterglow, warmth off | ✅ | ✅ |
 | Borderless window, black out the other screens | ✅ | ✅ |
@@ -68,7 +69,7 @@ Today's schedule runs across the top, each part in the color it puts on screen, 
 | Page | What's there |
 |---|---|
 | **Settings** | Day and evening colors, sunset offset, night start, Afterglow or a color at night, when the day starts, your coordinates · blackout covers every window, black cursors · Afterglow now, its brightness, keep text readable, invert · language, Start with Windows, Start menu, allow warm colors, pause, the settings file and log, quit |
-| **Hotkeys** | Every hotkey, how far warmer and cooler move, default hotkeys |
+| **Hotkeys** | Every hotkey, how far warmer and cooler move · fade color changes, how long scheduled and hotkey fades take · default hotkeys |
 
 Hover to select, click to change, right-click to go back. On a gauge, click where you want it; the mouse wheel and ‹ › step. Arrows and Enter work too, Tab switches page, Esc closes. Everything saves by itself.
 
@@ -101,6 +102,12 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ICM   GdiIcmGammaRange = 256 (
 ```
 
 Until the restart, a temporary key `HKLM\SOFTWARE\Candela warm colors pending` remembers that one is still needed. It's kept in memory only, so Windows removes it by itself at the restart.
+
+### Fades
+
+With **Hotkeys → Fade color changes** on, the screen moves to new colors gradually: scheduled changes take the **Scheduled fade** time (20 seconds unless you change it; up to an hour), and changes you make (hotkeys, the tray menu, the settings) take the **Hotkey fade** time (0.4 seconds; **Instant** turns it off for them). Pressing a hotkey again mid-fade carries on from wherever the screen is. Starting Candela mini, waking the PC and plugging in a screen put the colors on straight away.
+
+While warm colors are still locked (see above), a fade stops where Windows does, at about 3400K. Inverted Afterglow is the one change that never fades: half way there the screen would be a flat red, so it switches at once.
 
 ### Start with Windows
 

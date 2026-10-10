@@ -75,6 +75,10 @@ Ramp Blend(const Ramp& from, const Ramp& to, double t);  // t = 0: from, 1: to
 // is closer to `to` than the last one taken, so when it returns, the last
 // ramp `accepts` took is the answer.
 double ClosestAccepted(const Ramp& from, const Ramp& to, const std::function<bool(const Ramp&)>& accepts);
+// Whether stopping part of the way toward `to` still shows a usable picture.
+// Not for a ramp that turns a channel upside down (Afterglow's invert): half
+// way there every level of that channel is the same, a flat screen.
+bool Approachable(const Ramp& to);
 // Roughly what a ramp shows: the color temperature its white is nearest to
 // (900..6500, in 100s) and its brightness (the top of its strongest channel).
 int ApproxKelvin(const Ramp& r);
@@ -95,6 +99,11 @@ struct Effect {
     Matrix matrix;
 };
 Effect EffectFor(int kelvin, bool by_brightness);
+// For fades: part of the way from one filter to another (t = 0: from, 1: to).
+Matrix BlendMatrix(const Matrix& from, const Matrix& to, double t);
+// How far along a fade looks at a point in its time (0..1 -> 0..1): eased
+// at both ends, so it neither starts nor stops with a jolt.
+double FadeCurve(double progress);
 
 // ---- settings ---------------------------------------------------------------------------------
 // Where a new install starts (Greenwich) until you set your own town; on the
@@ -117,6 +126,12 @@ struct Config {
     std::wstring morning_mode = L"sunrise";  // "sunrise" or "fixed"
     std::wstring morning_time = L"08:00";
     int warmth_step_k = 100;
+    // Fades: color changes come on gradually rather than at once. Scheduled
+    // changes (sunset, night, morning) take fade_seconds; the ones you make
+    // (hotkeys, the tray menu, the settings) take fade_hotkey_ms (0 = instant).
+    bool fade = false;
+    int fade_seconds = 20;
+    int fade_hotkey_ms = 400;
     std::wstring hotkey_warmer = L"Alt+Shift+PageDown";
     std::wstring hotkey_cooler = L"Alt+Shift+PageUp";
     std::wstring hotkey_dimmer = L"Alt+PageDown";

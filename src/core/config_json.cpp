@@ -194,6 +194,7 @@ const Field kFields[] = {
     F(sunset_offset_min, kInt), F(night_start, kStr), F(night_darkroom, kBool), F(night_kelvin, kInt),
     F(darkroom_brightness, kDouble), F(darkroom_invert, kBool), F(darkroom_by_brightness, kBool),
     F(morning_mode, kStr), F(morning_time, kStr), F(warmth_step_k, kInt),
+    F(fade, kBool), F(fade_seconds, kInt), F(fade_hotkey_ms, kInt),
     F(hotkey_warmer, kStr), F(hotkey_cooler, kStr), F(hotkey_dimmer, kStr),
     F(hotkey_brighter, kStr), F(hotkey_off, kStr), F(hotkey_darkroom, kStr), F(hotkey_borderless, kStr),
     F(hotkey_blackout, kStr), F(blackout_always_on_top, kBool), F(borderless_overhang_px, kInt),

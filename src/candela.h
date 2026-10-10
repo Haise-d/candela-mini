@@ -46,7 +46,7 @@
 #define CANDELA_NAME L"Candela mini"          // the task, the shortcut, message boxes
 #define CANDELA_DIR L"Candela Mini"           // %APPDATA%\Candela Mini
 #define CANDELA_FULL_DIR L"Candela"           // full Candela's, read once to copy its settings
-#define CANDELA_VERSION L"1.0.0"
+#define CANDELA_VERSION L"1.1.0"
 
 // Messages posted to the main window.
 enum : UINT {
