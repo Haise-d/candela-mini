@@ -85,7 +85,9 @@ double FitLocked(Display& d) {
     core::Ramp from = core::IdentityRamp(), to;
     memcpy(to.ch, g_ramp, sizeof(to.ch));
     if (!memcmp(from.ch, to.ch, sizeof(to.ch))) return -1;  // normal colors refused: nothing closer to try
-    double t = core::ClosestAccepted(from, to, [&](const core::Ramp& r) {
+    // Part of the way to inverted Afterglow is a flat screen, not a milder
+    // version of it: normal colors instead (as full Candela does).
+    double t = !core::Approachable(to) ? 0 : core::ClosestAccepted(from, to, [&](const core::Ramp& r) {
         return SetDeviceGammaRamp(d.hdc, (LPVOID)r.ch) != FALSE;
     });
     core::Ramp best = core::Blend(from, to, t);

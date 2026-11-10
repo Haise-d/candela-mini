@@ -2,6 +2,16 @@
 
 What's new in each version of Candela mini. Downloads are on the [releases page](https://github.com/Haise-d/candela-mini/releases).
 
+## 1.1.1 — 2026-11-10
+
+### Fixed
+
+- Inverted Afterglow while warm colors are still locked could put a half-inverted picture on screen. It now stays on normal colors until Windows takes the whole change, as in Candela.
+
+### Known issues
+
+- Far north (Tromsø, Reykjavik), a night start after midnight can land after the next sunrise, and night colors then stay on through the day. On days with no sunrise or sunset, Candela mini uses 07:00 and 19:00.
+
 ## 1.1.0 — 2026-10-10
 
 ### New
